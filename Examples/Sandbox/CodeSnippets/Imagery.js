@@ -41,7 +41,7 @@
                 host : 'elevation.arcgisonline.com',
                 folder : 'WorldElevation',
                 service : 'DTMEllipsoidal',
-                token : '2G0dIXqmsH4zKVl7BZqNdsLUHKpCDfetelnSAZPkcC4CeHaL32TezkF9-x3blRiq_30O4FAYFv7ujgydVW-HDQ..',
+                token : 'SwrDy3Bca9S3NmvjMgQlToIT7jlRs9bbnuxWpcjTJAP6ikC76p0RCXiRQi8zF-mWpAQ7fRA5ZZzHRV4w6k1Nbw..',
                 proxy : new Cesium.DefaultProxy('/tiffToPng/')
             });
 
