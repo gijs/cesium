@@ -947,7 +947,7 @@ define([
                 maximumAnisotropy : context.getMaximumTextureFilterAnisotropy() || 8 // TODO: Remove Chrome work around
             });
             tile.state = TileState.TEXTURE_LOADED;
-            tile.image = undefined;
+            //tile.image = undefined;
         }
     };
 
@@ -1007,7 +1007,11 @@ define([
             var rtc = tile.get3DBoundingSphere().center;
             var projectedRTC = tile.get2DBoundingSphere(projection).center.clone();
 
-            var gran = (tile.zoom > 0) ? 0.05 * (1.0 / tile.zoom * 2.0) : 0.05; // seems like a good value after testing it for what looks good
+            //var gran = (tile.zoom > 0) ? 0.05 * (1.0 / tile.zoom * 2.0) : 0.05; // seems like a good value after testing it for what looks good
+
+            var xStep = (tile.extent.east - tile.extent.west) / (this._dayTileProvider.tileWidth - 1);
+            var yStep = (tile.extent.north - tile.extent.south) / (this._dayTileProvider.tileHeight - 1);
+            var gran = Math.max(xStep, yStep);
 
             var typedArray;
             var buffer;
@@ -1018,7 +1022,8 @@ define([
             var usage = BufferUsage.STATIC_DRAW;
 
             if (mode === SceneMode.SCENE3D) {
-                var buffers = ExtentTessellator.computeBuffers({
+                var buffers = ExtentTessellator.computeBuffersFromTerrain({
+                    terrain :  new Float32Array(tile.image.getContext('2d').getImageData(0, 0, this._dayTileProvider.tileWidth, this._dayTileProvider.tileHeight).data.buffer),
                     ellipsoid : ellipsoid,
                     extent : tile.extent,
                     granularity : gran,

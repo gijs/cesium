@@ -66,6 +66,14 @@ public final class TiffToPngHandler extends AbstractHandler {
 		dontProxyHeaders.add("upgrade");
 	}
 	
+	public static void main(String[] args) {
+		int positive = Float.floatToRawIntBits(1.0000000f);
+		int negative = Float.floatToRawIntBits(-1.0000001f);
+		
+		System.out.println((positive & 0x00000001) >> 0);
+		System.out.println((negative & 0x00000001) >>> 0);
+	}
+	
 	public static BufferedImage createPng(InputStream tiffInput) throws IOException {
 		BufferedImage sourceImage = ImageIO.read(tiffInput);
 		Raster sourceRaster = sourceImage.getData();
@@ -80,14 +88,19 @@ public final class TiffToPngHandler extends AbstractHandler {
 		
 		for (int i = 0; i < pixels.length; ++i) {
 			// When we read pixels in Javascript using canvas.getImageData(), the bytes are ordered
-			// Red-Green-Blue-Alpha.   In our result image, the integer is organized
-			// Alpha-Blue-Green-Red which corresponds to big-endian 0xAARRGGBB.
-			// floatToRawIntBits puts the sign in the most significant bit of the integer,
-			// which means the sign bit goes into alpha.  But to m4atch the order on the client,
+			// Red-Green-Blue-Alpha.  setElem takes color values in 0xAARRGGBB format.
+			// floatToRawIntBits puts the sign in the most significant byte of the integer,
+			// which means the sign bit goes into alpha.  But to match the order on the client,
 			// we want the sign bit in red.  So shift 8 bits to the right and add the prior
 			// least significant byte to the most significant position.
 			int pixelValue = Float.floatToRawIntBits(pixels[i]);
-			buffer.setElem(i, (pixelValue >> 8) | ((pixelValue & 0xFF) << 24));
+			pixelValue = (pixelValue >>> 8) | ((pixelValue & 0xFF) << 24);
+//			pixelValue = ((pixelValue & 0xFF) << 24) |
+//					     ((pixelValue & 0xFF00) << 8) |
+//					     ((pixelValue & 0xFF0000) >>> 8) |
+//					     ((pixelValue & 0xFF000000) >>> 24);
+			buffer.setElem(i, pixelValue);
+			//buffer.setElem(i, 0xFFFF0000);
 		}
 
 		return result;

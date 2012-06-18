@@ -13,24 +13,33 @@ require({
     var primitives = scene.getPrimitives();
 
     // Bing Maps
-    var bing = new Cesium.BingMapsTileProvider({
-        server : 'dev.virtualearth.net',
-        mapStyle : Cesium.BingMapsStyle.AERIAL,
-        // Some versions of Safari support WebGL, but don't correctly implement
-        // cross-origin image loading, so we need to load Bing imagery using a proxy.
-        proxy : Cesium.FeatureDetection.supportsCrossOriginImagery() ? undefined : new Cesium.DefaultProxy('/proxy/')
+//    var bing = new Cesium.BingMapsTileProvider({
+//        server : 'dev.virtualearth.net',
+//        mapStyle : Cesium.BingMapsStyle.AERIAL,
+//        // Some versions of Safari support WebGL, but don't correctly implement
+//        // cross-origin image loading, so we need to load Bing imagery using a proxy.
+//        proxy : Cesium.FeatureDetection.supportsCrossOriginImagery() ? undefined : new Cesium.DefaultProxy('/proxy/')
+//    });
+
+    var arcgisimage = new Cesium.ArcGISImageServerTileProvider({
+        host : 'elevation.arcgisonline.com',
+        folder : 'WorldElevation',
+        service : 'DTMEllipsoidal',
+        token : 'SwrDy3Bca9S3NmvjMgQlToIT7jlRs9bbnuxWpcjTJAP6ikC76p0RCXiRQi8zF-mWpAQ7fRA5ZZzHRV4w6k1Nbw..',
+        proxy : new Cesium.DefaultProxy('/tiffToPng/')
     });
 
     var cb = new Cesium.CentralBody(ellipsoid);
-    cb.dayTileProvider = bing;
+    cb.dayTileProvider = arcgisimage;
     cb.nightImageSource = '../../Images/land_ocean_ice_lights_2048.jpg';
     cb.specularMapSource = '../../Images/earthspec1k.jpg';
     if (scene.getContext().getMaximumTextureSize() > 2048) {
         cb.cloudsMapSource = '../../Images/earthcloudmaptrans.jpg';
         cb.bumpMapSource = '../../Images/earthbump1k.jpg';
     }
-    cb.showSkyAtmosphere = true;
-    cb.showGroundAtmosphere = true;
+    cb.showSkyAtmosphere = false;
+    cb.showGroundAtmosphere = false;
+    cb.showClouds = false;
     primitives.setCentralBody(cb);
 
     scene.getCamera().frustum.near = 1.0;
