@@ -43,7 +43,6 @@ define([
     DistanceIntervalMaterial.prototype._getShaderSource = function() {
         return "#define NUMBER_OF_DISTANCES " + this.intervals.length.toString() + "\n" +
                materialBuilder.constructMaterial(ShadersDistanceIntervalMaterial);
-
     };
 
     return DistanceIntervalMaterial;

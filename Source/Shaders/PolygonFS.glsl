@@ -46,6 +46,10 @@ void main()
     float specularComponent = agi_getMaterialSpecularComponent(helperInput);
     vec3 emissionComponent = agi_getMaterialEmissionComponent(helperInput);
 
+#ifndef AFFECTED_BY_LIGHTING
+    specularComponent = 0.0;
+#endif
+
     //Final
     gl_FragColor = agi_lightValuePhong(agi_sunDirectionEC, positionToEyeEC, normalComponent, diffuseComponent, specularComponent, emissionComponent);
 }

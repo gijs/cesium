@@ -78,14 +78,14 @@ define([
          *
          * @type Boolean
          */
-        this.show = (typeof t.show === "undefined") ? true : t.show;
+        this.show = (typeof t.show === 'undefined') ? true : t.show;
 
         /**
          * DOC_TBA
          *
          * @type Boolean
          */
-        this.showIntersection = (typeof t.showIntersection === "undefined") ? true : t.showIntersection;
+        this.showIntersection = (typeof t.showIntersection === 'undefined') ? true : t.showIntersection;
 
         /**
          * The 4x4 transformation matrix that transforms this sensor from model to world coordinates.  In it's model
@@ -93,8 +93,8 @@ define([
          * angles are measured from the x-axis.  This matrix is available to GLSL vertex and fragment shaders via
          * {@link agi_model} and derived uniforms.
          * <br /><br />
-         * <div align="center">
-         * <img src="images/ComplexConicSensorVolume.setModelMatrix.png" width="400" height="258" /><br />
+         * <div align='center'>
+         * <img src='images/ComplexConicSensorVolume.setModelMatrix.png' width='400' height='258' /><br />
          * Model coordinate system for a conic sensor
          * </div>
          *
@@ -117,7 +117,7 @@ define([
          *
          * @see ComplexConicSensorVolume#outerHalfAngle
          */
-        this.innerHalfAngle = (typeof t.innerHalfAngle === "undefined") ? CesiumMath.PI_OVER_TWO : t.innerHalfAngle;
+        this.innerHalfAngle = (typeof t.innerHalfAngle === 'undefined') ? CesiumMath.PI_OVER_TWO : t.innerHalfAngle;
 
         /**
          * DOC_TBA
@@ -126,7 +126,7 @@ define([
          *
          * @see ComplexConicSensorVolume#innerHalfAngle
          */
-        this.outerHalfAngle = (typeof t.outerHalfAngle === "undefined") ? CesiumMath.PI_OVER_TWO : t.outerHalfAngle;
+        this.outerHalfAngle = (typeof t.outerHalfAngle === 'undefined') ? CesiumMath.PI_OVER_TWO : t.outerHalfAngle;
         this._outerHalfAngle = undefined;
 
         /**
@@ -136,7 +136,7 @@ define([
          *
          * @see ComplexConicSensorVolume#innerHalfAngle
          */
-        this.maximumClockAngle = (typeof t.maximumClockAngle === "undefined") ? Math.PI : t.maximumClockAngle;
+        this.maximumClockAngle = (typeof t.maximumClockAngle === 'undefined') ? Math.PI : t.maximumClockAngle;
         this._maximumClockAngle = undefined;
 
         /**
@@ -146,7 +146,7 @@ define([
          *
          * @see ComplexConicSensorVolume#innerHalfAngle
          */
-        this.minimumClockAngle = (typeof t.minimumClockAngle === "undefined") ? -Math.PI : t.minimumClockAngle;
+        this.minimumClockAngle = (typeof t.minimumClockAngle === 'undefined') ? -Math.PI : t.minimumClockAngle;
         this._minimumClockAnglee = undefined;
 
         /**
@@ -154,7 +154,7 @@ define([
          *
          * @type Number
          */
-        this.radius = (typeof t.radius === "undefined") ? Number.POSITIVE_INFINITY : t.radius;
+        this.radius = (typeof t.radius === 'undefined') ? Number.POSITIVE_INFINITY : t.radius;
         this._radius = undefined;
 
         //        /**
@@ -162,14 +162,14 @@ define([
         //         *
         //         * @type Number
         //         */
-        //        this.minimumClockAngle = (typeof t.minimumClockAngle === "undefined") ? (-Math.PI / 4.0) : t.minimumClockAngle;
+        //        this.minimumClockAngle = (typeof t.minimumClockAngle === 'undefined') ? (-Math.PI / 4.0) : t.minimumClockAngle;
 
         //        /**
         //         * DOC_TBA
         //         *
         //         * @type Number
         //         */
-        //        this.maximumClockAngle = (typeof t.maximumClockAngle === "undefined") ? (Math.PI / 4.0) : t.maximumClockAngle;
+        //        this.maximumClockAngle = (typeof t.maximumClockAngle === 'undefined') ? (Math.PI / 4.0) : t.maximumClockAngle;
 
         /**
          * DOC_TBA
@@ -210,7 +210,7 @@ define([
          *
          * @type Number
          */
-        this.erosion = (typeof t.erosion === "undefined") ? 1.0 : t.erosion;
+        this.erosion = (typeof t.erosion === 'undefined') ? 1.0 : t.erosion;
 
         var that = this;
         this._uniforms = {
@@ -351,11 +351,11 @@ define([
         }
 
         if (this.innerHalfAngle > this.outerHalfAngle) {
-            throw new DeveloperError("this.innerHalfAngle cannot be greater than this.outerHalfAngle.");
+            throw new DeveloperError('this.innerHalfAngle cannot be greater than this.outerHalfAngle.');
         }
 
         if (this.radius < 0.0) {
-            throw new DeveloperError("this.radius must be greater than or equal to zero.");
+            throw new DeveloperError('this.radius must be greater than or equal to zero.');
         }
 
         if (this.show) {
@@ -386,19 +386,19 @@ define([
                 this._drawUniforms = combine(this._uniforms, material._uniforms);
 
                 var fsSource =
-                    "#line 0\n" +
+                    '#line 0\n' +
                     ShadersNoise +
-                    "#line 0\n" +
+                    '#line 0\n' +
                     ShadersRay +
-                    "#line 0\n" +
+                    '#line 0\n' +
                     ShadersConstructiveSolidGeometry +
-                    "#line 0\n" +
+                    '#line 0\n' +
                     ShadersSensorVolume +
                     "#line 0\n" +
                     materialHelperInput +
                     "#line 0\n" +
                     material._getShaderSource() +
-                    "#line 0\n" +
+                    '#line 0\n' +
                     ComplexConicSensorVolumeFS;
 
                 this._sp = this._sp && this._sp.release();
@@ -449,12 +449,12 @@ define([
         if (this._mode === SceneMode.SCENE3D && this.show) {
             // Since this ignores all other materials, if a material does discard, the sensor will still be picked.
             var fsSource =
-                "#define RENDER_FOR_PICK 1\n" +
-                "#line 0\n" +
+                '#define RENDER_FOR_PICK 1\n' +
+                '#line 0\n' +
                 ShadersRay +
-                "#line 0\n" +
+                '#line 0\n' +
                 ShadersConstructiveSolidGeometry +
-                "#line 0\n" +
+                '#line 0\n' +
                 ShadersSensorVolume +
                 "#line 0\n" +
                 materialHelperInput +
