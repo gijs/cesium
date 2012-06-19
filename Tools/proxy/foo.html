@@ -1,0 +1,28 @@
+<html>
+  <head>
+    <title>Foo</title>
+  </head>
+  <script>
+    console.log('hi');
+    var image = new Image();
+    image.onload = function() {
+      console.log('loaded');
+      var canvas = document.createElement('canvas');
+      canvas.width = image.width;
+      canvas.height = image.height;
+      var context = canvas.getContext('2d');
+      context.setCompositeOperation('copy');
+      context.drawImage(image, 0, 0);
+      var fromPixels = context.getImageData(0, 0, image.width, image.height).data;
+      console.log(fromPixels[0]);
+      console.log(fromPixels[1]);
+      console.log(fromPixels[2]);
+      console.log(fromPixels[3]);
+    };
+    image.src = 'download.png';
+  </script>
+
+  <body>
+  
+  </body>
+</html>

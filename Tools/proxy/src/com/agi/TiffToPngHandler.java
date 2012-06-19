@@ -94,7 +94,8 @@ public final class TiffToPngHandler extends AbstractHandler {
 			// we want the sign bit in red.  So shift 8 bits to the right and add the prior
 			// least significant byte to the most significant position.
 			int pixelValue = Float.floatToRawIntBits(pixels[i]);
-			pixelValue = (pixelValue >>> 8) | ((pixelValue & 0xFF) << 24);
+			//pixelValue = (pixelValue >>> 8) | ((pixelValue & 0xFF) << 24);
+			pixelValue = 0x01020304;
 //			pixelValue = ((pixelValue & 0xFF) << 24) |
 //					     ((pixelValue & 0xFF00) << 8) |
 //					     ((pixelValue & 0xFF0000) >>> 8) |
