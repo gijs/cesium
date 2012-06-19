@@ -1023,7 +1023,7 @@ define([
 
             if (mode === SceneMode.SCENE3D) {
                 var buffers = ExtentTessellator.computeBuffersFromTerrain({
-                    terrain :  new Float32Array(tile.image.getContext('2d').getImageData(0, 0, this._dayTileProvider.tileWidth, this._dayTileProvider.tileHeight).data.buffer),
+                    terrain :  tile.image.getContext('2d').getImageData(0, 0, this._dayTileProvider.tileWidth, this._dayTileProvider.tileHeight).data,
                     ellipsoid : ellipsoid,
                     extent : tile.extent,
                     granularity : gran,

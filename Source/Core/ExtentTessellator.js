@@ -169,7 +169,12 @@ define([
                     j = boundExtent.east;
                 }
 
-                var cartPosition = new Cartographic3(j, i, terrain[rows * numCols + cols]);
+                var terrainOffset = rows * (numCols * 4) + cols * 4;
+                var mmHeight = (terrain[terrainOffset] << 16) +
+                               (terrain[terrainOffset + 1] << 8) +
+                               terrain[terrainOffset + 2];
+                var meterHeight = mmHeight / 1000.0 - 1000.0;
+                var cartPosition = new Cartographic3(j, i, meterHeight);
                 var position = ellipsoid.toCartesian(cartPosition).subtract(relativeToCenter);
                 vertices.push(position.x, position.y, position.z);
 

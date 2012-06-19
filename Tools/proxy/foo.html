@@ -11,7 +11,7 @@
       canvas.width = image.width;
       canvas.height = image.height;
       var context = canvas.getContext('2d');
-      context.setCompositeOperation('copy');
+      context.globalCompositeOperation = 'copy';
       context.drawImage(image, 0, 0);
       var fromPixels = context.getImageData(0, 0, image.width, image.height).data;
       console.log(fromPixels[0]);
@@ -19,7 +19,7 @@
       console.log(fromPixels[2]);
       console.log(fromPixels[3]);
     };
-    image.src = 'download.png';
+    image.src = 'download3.png';
   </script>
 
   <body>

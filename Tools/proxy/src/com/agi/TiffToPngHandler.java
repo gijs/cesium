@@ -83,25 +83,21 @@ public final class TiffToPngHandler extends AbstractHandler {
 
 		//final int bias = 1000;
 
-		BufferedImage result = new BufferedImage(sourceImage.getWidth(), sourceImage.getHeight(), BufferedImage.TYPE_INT_ARGB);
+		BufferedImage result = new BufferedImage(sourceImage.getWidth(), sourceImage.getHeight(), BufferedImage.TYPE_INT_RGB);
 		DataBufferInt buffer = (DataBufferInt)result.getRaster().getDataBuffer();
 		
 		for (int i = 0; i < pixels.length; ++i) {
-			// When we read pixels in Javascript using canvas.getImageData(), the bytes are ordered
-			// Red-Green-Blue-Alpha.  setElem takes color values in 0xAARRGGBB format.
-			// floatToRawIntBits puts the sign in the most significant byte of the integer,
-			// which means the sign bit goes into alpha.  But to match the order on the client,
-			// we want the sign bit in red.  So shift 8 bits to the right and add the prior
-			// least significant byte to the most significant position.
-			int pixelValue = Float.floatToRawIntBits(pixels[i]);
-			//pixelValue = (pixelValue >>> 8) | ((pixelValue & 0xFF) << 24);
-			pixelValue = 0x01020304;
-//			pixelValue = ((pixelValue & 0xFF) << 24) |
-//					     ((pixelValue & 0xFF00) << 8) |
-//					     ((pixelValue & 0xFF0000) >>> 8) |
-//					     ((pixelValue & 0xFF000000) >>> 24);
-			buffer.setElem(i, pixelValue);
-			//buffer.setElem(i, 0xFFFF0000);
+			// Offset the height by 1000.0 meters to avoid negative heights.
+			float heightFloat = pixels[i] + 1000.0f;
+			
+			// Convert the height to integer millimeters.
+			int height = (int)(heightFloat * 1000.0);
+			
+			if (height < 0 || height >= (1 << 24))
+				throw new RuntimeException("Invalid height.");
+			
+			// Encode the high byte in red, low byte in blue.
+			buffer.setElem(i, height);
 		}
 
 		return result;
